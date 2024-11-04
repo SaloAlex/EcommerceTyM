@@ -31,7 +31,7 @@ const ProductCarousel = ({ products }) => {
   const settings = {
     dots: false,
     infinite: false,
-    speed: 500, // Default speed
+    speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
     arrows: showArrows,
@@ -43,7 +43,7 @@ const ProductCarousel = ({ products }) => {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
-          speed: 500, // Speed on large screens
+          speed: 500,
         },
       },
       {
@@ -51,7 +51,7 @@ const ProductCarousel = ({ products }) => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          speed: 400, // Faster on medium screens
+          speed: 400,
         },
       },
       {
@@ -59,7 +59,7 @@ const ProductCarousel = ({ products }) => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          speed: 300, // Fastest on small screens
+          speed: 300,
         },
       },
     ],
@@ -71,7 +71,16 @@ const ProductCarousel = ({ products }) => {
         {products.map((product) => (
           <div key={product.id} className="p-1 sm:p-2 md:p-3 lg:p-3.5">
             <Link to={`/products/${product.id}`}>
-              <div className="bg-white border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 w-full max-w-[200px] sm:max-w-[220px] md:max-w-[250px] lg:max-w-[290px] mx-auto">
+              <div className="bg-white border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 w-full max-w-[200px] sm:max-w-[220px] md:max-w-[250px] lg:max-w-[290px] mx-auto relative">
+                
+                {/* Etiqueta de descuento */}
+                {product.discount && (
+                  <div className="absolute top-2 right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded-md">
+                    {product.discount}% OFF
+                  </div>
+                )}
+
+                {/* Imagen del producto */}
                 <div className="relative w-full h-36 sm:h-44 md:h-52 lg:h-64">
                   {product.imageUrls && product.imageUrls.length > 0 ? (
                     <img
@@ -85,12 +94,35 @@ const ProductCarousel = ({ products }) => {
                     </div>
                   )}
                 </div>
-                <div className="p-1 sm:p-2 md:p-3">
-                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-1 text-center">
+
+                {/* Información del producto */}
+                <div className="p-2 text-center">
+                  {/* Nombre del producto */}
+                  <h3 className="text-sm font-semibold text-gray-800 mb-1">
                     {product.name}
                   </h3>
-                  <p className="text-sm sm:text-base md:text-lg text-black font-bold text-center">
-                    ${product.price}
+
+                  {/* Precio con descuento */}
+                  <div className="text-center mb-2">
+                    {product.originalPrice && product.discount ? (
+                      <>
+                        <span className="text-sm text-gray-500 line-through mr-2">
+                          ${product.originalPrice}
+                        </span>
+                        <span className="text-2xl font-bold text-gray-800">
+                          ${product.price}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-2xl font-bold text-gray-800">
+                        ${product.price}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Información adicional de promoción */}
+                  <p className="text-xs text-green-600 font-semibold">
+                    Llega GRATIS en 48hs
                   </p>
                 </div>
               </div>

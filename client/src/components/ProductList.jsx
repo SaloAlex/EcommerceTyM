@@ -77,7 +77,7 @@ const ProductList = () => {
       {categoriesToShow.map((category) => (
         <div key={category} className="category-section my-8 px-4">
           {/* Título personalizado de la categoría */}
-          <h2 className="text-2xl md:text-3ms font-bold mb-4 text-gray-800 text-center md:text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 text-center">
             {categoryTitles[category]}
           </h2>
           <ProductCarousel products={productsByCategory[category]} />

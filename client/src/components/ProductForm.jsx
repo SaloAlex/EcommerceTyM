@@ -1,4 +1,3 @@
-// ProductForm.js
 import PropTypes from 'prop-types';
 
 const ProductForm = ({
@@ -47,10 +46,42 @@ const ProductForm = ({
           type="number"
           id="price"
           name="price"
-          value={newProduct.price}
+          value={newProduct.price || ""}
           onChange={handleInputChange}
           className="w-full p-2 border rounded-md"
           placeholder="Precio"
+        />
+      </div>
+
+      {/* Precio Original */}
+      <div className="mb-2">
+        <label htmlFor="originalPrice" className="block text-sm font-medium">
+          Precio Original
+        </label>
+        <input
+          type="number"
+          id="originalPrice"
+          name="originalPrice"
+          value={newProduct.originalPrice || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded-md"
+          placeholder="Precio original (si aplica)"
+        />
+      </div>
+
+      {/* Descuento */}
+      <div className="mb-2">
+        <label htmlFor="discount" className="block text-sm font-medium">
+          Descuento (%)
+        </label>
+        <input
+          type="number"
+          id="discount"
+          name="discount"
+          value={newProduct.discount || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded-md"
+          placeholder="Porcentaje de descuento"
         />
       </div>
 

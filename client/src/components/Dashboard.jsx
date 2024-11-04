@@ -19,6 +19,8 @@ const Dashboard = () => {
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
+    originalPrice: "",
+    discount: "",
     description: "",
     imageUrls: [],
     category: "",
@@ -213,12 +215,14 @@ const Dashboard = () => {
   const startEditingProduct = (product) => {
     setEditingProduct(product);
     setNewProduct({
-      name: product.name,
-      price: String(product.price),
-      description: product.description,
+      name: product.name || "",  // Asegurarte que siempre sea una cadena
+      price: String(product.price || ""), // Convertir a cadena, si es necesario
+      originalPrice: String(product.originalPrice || ""), // Convertir a cadena, si es necesario
+      discount: String(product.discount || ""), // Convertir a cadena, si es necesario
+      description: product.description || "",
       imageUrls: product.imageUrls || [],
       category: product.category || "",
-      stock: Number(product.stock) || 0,
+      stock: Number(product.stock) || 0, // Convertir a número, si es necesario
       paused: product.paused || false,
     });
   };
