@@ -1,28 +1,22 @@
-// Importa las funciones necesarias de los SDKs de Firebase
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore"; // Para Firestore
-import { getAuth } from "firebase/auth"; // Para autenticación
-import { getStorage } from "firebase/storage"; // Para Storage
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
-// Configuración de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBClThDiqs2ntsWigUxVv_Ro-0YI0QY6M8",
-  authDomain: "ecommerce-mati.firebaseapp.com",
-  projectId: "ecommerce-mati",
-  storageBucket: "ecommerce-mati.appspot.com",
-  messagingSenderId: "862242028887",
-  appId: "1:862242028887:web:21d6a75559c9b90f6c9212",
-  measurementId: "G-11GV0RYVWE",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBClThDiqs2ntsWigUxVv_Ro-0YI0QY6M8",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "ecommerce-mati.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "ecommerce-mati",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "ecommerce-mati.appspot.com",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "862242028887",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:862242028887:web:21d6a75559c9b90f6c9212",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-11GV0RYVWE",
 };
 
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
-
-// Inicializar servicios de Firebase
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-// Exportar las instancias de Firebase para usarlas en tu aplicación
 export { db, auth, storage };

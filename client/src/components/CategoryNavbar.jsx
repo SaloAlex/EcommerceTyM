@@ -6,18 +6,18 @@ const CategoryNavbar = ({ categories, selectedCategory, onCategorySelect }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="p-4 mb-6 shadow-lg bg-gray-800">
+    <nav className="p-4 shadow-lg bg-gray-800">
       <div className="container mx-auto flex justify-between items-center">
         {/* Texto a la izquierda */}
-        <h2 className="text-2xl md:text-4xl font-bold text-blue-300">
+        <h2 className="text-2xl lg:text-4xl font-bold text-blue-300">
           ¡Nuestros{' '}
           <span className="text-white bg-gray-800 px-2 py-1 rounded">
             productos!
           </span>
         </h2>
 
-        {/* Menú de categorías - visible solo en pantallas grandes */}
-        <div className="hidden md:flex space-x-4 items-center">
+        {/* Menú de categorías - visible en pantallas grandes */}
+        <div className="hidden lg:flex space-x-4 items-center">
           <ul className="flex space-x-4">
             <li>
               <button
@@ -48,18 +48,18 @@ const CategoryNavbar = ({ categories, selectedCategory, onCategorySelect }) => {
           </ul>
         </div>
 
-        {/* Botón de menú hamburguesa para pantallas pequeñas */}
+        {/* Botón de menú hamburguesa para pantallas medianas y pequeñas */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden text-white text-2xl focus:outline-none"
+          className="lg:hidden text-white text-2xl focus:outline-none"
         >
           {isMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      {/* Modal del menú en pantallas pequeñas */}
+      {/* Modal del menú en pantallas pequeñas y medianas */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50 md:hidden p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50 lg:hidden p-4">
           <button
             onClick={() => setIsMenuOpen(false)}
             className="absolute top-4 right-4 text-white text-3xl focus:outline-none"
@@ -67,7 +67,7 @@ const CategoryNavbar = ({ categories, selectedCategory, onCategorySelect }) => {
             <FaTimes />
           </button>
 
-          {/* Opciones de Categorías para pantallas pequeñas */}
+          {/* Opciones de Categorías */}
           <ul className="flex flex-col items-center space-y-6 text-white text-2xl">
             <li>
               <button

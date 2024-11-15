@@ -1,13 +1,13 @@
-import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
-import { AuthContext } from '../context/AuthContext'; // Importa AuthContext
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import CartItem from './CartItem';
-import CartSummary from './CartSummary';
-import ShippingModal from './ShippingModal';
-import ShippingCalculator from './ShippingCalculator';
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext"; // Importa AuthContext
+import axios from "axios";
+import Swal from "sweetalert2";
+import CartItem from "./CartItem";
+import CartSummary from "./CartSummary";
+import ShippingModal from "./ShippingModal";
+import ShippingCalculator from "./ShippingCalculator";
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart } = useContext(CartContext);
@@ -27,17 +27,6 @@ const Cart = () => {
     setShowShippingModal(false);
   };
 
-  const calculateShippingCost = (postalCode) => {
-    const shippingRates = {
-      1000: 300,
-      1658: 350,
-      2000: 400,
-      3000: 500,
-    };
-
-    const numericPostalCode = parseInt(postalCode, 10);
-    return shippingRates[numericPostalCode] || 600;
-  };
 
   const handleShippingAccepted = (cost) => {
     setShippingCost(cost);
@@ -62,7 +51,8 @@ const Cart = () => {
       return items.map((item) => {
         const itemTotalPrice = item.unit_price * item.quantity;
         const itemDiscount = itemTotalPrice * discountRatio;
-        const adjustedUnitPrice = (itemTotalPrice - itemDiscount) / item.quantity;
+        const adjustedUnitPrice =
+          (itemTotalPrice - itemDiscount) / item.quantity;
         return {
           ...item,
           unit_price: parseFloat(adjustedUnitPrice.toFixed(2)),
@@ -76,98 +66,98 @@ const Cart = () => {
     // Verifica si el usuario está autenticado
     if (!isAuthenticated) {
       Swal.fire({
-        icon: 'info',
-        title: 'Inicia sesión',
-        text: 'Por favor, inicia sesión para completar la compra.',
+        icon: "info",
+        title: "Inicia sesión",
+        text: "Por favor, inicia sesión para completar la compra.",
       });
-      navigate('/login'); // Redirige a la página de inicio de sesión si no está autenticado
+      navigate("/login"); // Redirige a la página de inicio de sesión si no está autenticado
       return;
     }
-  
+
     // Verifica si el carrito tiene productos
     if (!cartItems || cartItems.length === 0) {
       Swal.fire({
-        icon: 'warning',
-        title: 'Atención',
-        text: 'Por favor, asegúrate de que el carrito tenga productos.',
+        icon: "warning",
+        title: "Atención",
+        text: "Por favor, asegúrate de que el carrito tenga productos.",
       });
       return;
     }
-  
+
     // Verifica si el costo de envío está calculado
     if (shippingCost === 0) {
       Swal.fire({
-        icon: 'warning',
-        title: 'Atención',
-        text: 'Por favor, asegúrate de que el costo de envío esté calculado.',
+        icon: "warning",
+        title: "Atención",
+        text: "Por favor, asegúrate de que el costo de envío esté calculado.",
       });
       return;
     }
-  
+
     setLoading(true);
     try {
       for (const item of cartItems) {
         if (!item.id) {
           Swal.fire({
-            icon: 'error',
-            title: 'Error',
+            icon: "error",
+            title: "Error",
             text: `El producto ${item.name} no tiene un identificador válido.`,
           });
           setLoading(false);
           return;
         }
       }
-  
+
       let items = cartItems.map((item) => ({
         title: item.name,
         quantity: Number(item.quantity),
-        currency_id: 'ARS',
+        currency_id: "ARS",
         unit_price: item.price,
       }));
-  
+
       const totalProductsPrice = items.reduce(
         (acc, item) => acc + item.unit_price * item.quantity,
         0
       );
-  
+
       items = applyDiscount(items, totalProductsPrice);
-  
+
       if (shippingCost > 0) {
         items.push({
-          title: 'Costo de envío',
+          title: "Costo de envío",
           quantity: 1,
-          currency_id: 'ARS',
+          currency_id: "ARS",
           unit_price: shippingCost,
         });
       }
-  
+
       const preference = {
         items: items,
       };
-  
+
       const response = await axios.post(
-        'http://localhost:3000/create_preference',
+        "http://localhost:3000/create_preference",
         { preference }
       );
-  
+
       const { id } = response.data;
       Swal.fire({
-        icon: 'success',
-        title: 'Redirigiendo a pago',
-        text: 'Serás redirigido a Mercado Pago.',
+        icon: "success",
+        title: "Redirigiendo a pago",
+        text: "Serás redirigido a Mercado Pago.",
         timer: 2000,
         showConfirmButton: false,
       });
-  
+
       setTimeout(() => {
         window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=${id}`;
       }, 2000);
     } catch (error) {
-      console.error('Error al procesar la compra:', error);
+      console.error("Error al procesar la compra:", error);
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al procesar la compra. Intenta nuevamente.',
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al procesar la compra. Intenta nuevamente.",
       });
     } finally {
       setLoading(false);
@@ -213,10 +203,7 @@ const Cart = () => {
 
       {showShippingModal && (
         <ShippingModal onClose={handleCloseShippingModal}>
-          <ShippingCalculator
-            calculateShippingCost={calculateShippingCost}
-            onShippingAccepted={handleShippingAccepted}
-          />
+          <ShippingCalculator onShippingAccepted={handleShippingAccepted} />
         </ShippingModal>
       )}
     </div>
