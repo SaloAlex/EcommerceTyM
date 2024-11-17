@@ -2,7 +2,8 @@ import admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
 
 // Importar el archivo JSON desde la carpeta config
-import serviceAccount from '../firebaseConfig/ecommerce-mati-firebase-adminsdk-cq9fp-04e7ea8618.json' assert { type: 'json' };
+import serviceAccount from '../ecommerce-mati-firebase-adminsdk-cq9fp-04e7ea8618.json' assert { type: 'json' };
+
 
 
 // Inicializar Firebase Admin SDK
