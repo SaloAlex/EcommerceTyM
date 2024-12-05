@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://www.tecnoymas.shop'],
+  origin: ['https://www.tecnoymas.shop'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
@@ -110,9 +110,9 @@ app.post('/create_preference', async (req, res) => {
     const preferenceData = {
       items,
       back_urls: {
-        success: 'http://localhost:5173/success',
-        failure: 'http://localhost:5173/failure',
-        pending: 'http://localhost:5173/pending',
+        success: 'https://www.tecnoymas.shop/success',
+        failure: 'https://www.tecnoymas.shop/failure',
+        pending: 'https://www.tecnoymas.shop/pending',
       },
       auto_return: 'approved',
     };
@@ -164,5 +164,5 @@ app.post('/webhook', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+  console.log(`Servidor corriendo en el puerto ${port}`);
 });
