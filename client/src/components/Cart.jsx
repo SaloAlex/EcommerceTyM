@@ -136,7 +136,7 @@ const Cart = () => {
       };
 
       const response = await axios.post(
-        "https://www.tecnoymas.shop/api/create_preference",
+        `${import.meta.env.VITE_BACKEND_URL}/create_preference`,
         { preference }
     );
 
