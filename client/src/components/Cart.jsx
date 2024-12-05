@@ -119,9 +119,9 @@ const Cart = () => {
         const preference = { items };
 
         const response = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/create_preference`,
-            { preference }
-        );
+          'https://www.tecnoymas.shop/create_preference',
+          { preference }
+      );
 
         const { id } = response.data;
         Swal.fire({
