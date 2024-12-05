@@ -136,9 +136,9 @@ const Cart = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/create_preference",
+        "https://www.tecnoymas.shop/api/create_preference",
         { preference }
-      );
+    );
 
       const { id } = response.data;
       Swal.fire({
