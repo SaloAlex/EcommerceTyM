@@ -63,106 +63,90 @@ const Cart = () => {
   };
 
   const handleCheckout = async () => {
-    // Verifica si el usuario está autenticado
     if (!isAuthenticated) {
-      Swal.fire({
-        icon: "info",
-        title: "Inicia sesión",
-        text: "Por favor, inicia sesión para completar la compra.",
-      });
-      navigate("/login"); // Redirige a la página de inicio de sesión si no está autenticado
-      return;
+        Swal.fire({
+            icon: "info",
+            title: "Inicia sesión",
+            text: "Por favor, inicia sesión para completar la compra.",
+        });
+        navigate("/login");
+        return;
     }
 
-    // Verifica si el carrito tiene productos
     if (!cartItems || cartItems.length === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "Atención",
-        text: "Por favor, asegúrate de que el carrito tenga productos.",
-      });
-      return;
+        Swal.fire({
+            icon: "warning",
+            title: "Atención",
+            text: "Por favor, asegúrate de que el carrito tenga productos.",
+        });
+        return;
     }
 
-    // Verifica si el costo de envío está calculado
     if (shippingCost === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "Atención",
-        text: "Por favor, asegúrate de que el costo de envío esté calculado.",
-      });
-      return;
+        Swal.fire({
+            icon: "warning",
+            title: "Atención",
+            text: "Por favor, asegúrate de que el costo de envío esté calculado.",
+        });
+        return;
     }
 
     setLoading(true);
     try {
-      for (const item of cartItems) {
-        if (!item.id) {
-          Swal.fire({
+        let items = cartItems.map((item) => ({
+            title: item.name,
+            quantity: Number(item.quantity),
+            currency_id: "ARS",
+            unit_price: item.price,
+        }));
+
+        const totalProductsPrice = items.reduce(
+            (acc, item) => acc + item.unit_price * item.quantity,
+            0
+        );
+
+        items = applyDiscount(items, totalProductsPrice);
+
+        if (shippingCost > 0) {
+            items.push({
+                title: "Costo de envío",
+                quantity: 1,
+                currency_id: "ARS",
+                unit_price: shippingCost,
+            });
+        }
+
+        const preference = { items };
+
+        const response = await axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/create_preference`,
+            { preference }
+        );
+
+        const { id } = response.data;
+        Swal.fire({
+            icon: "success",
+            title: "Redirigiendo a pago",
+            text: "Serás redirigido a Mercado Pago.",
+            timer: 2000,
+            showConfirmButton: false,
+        });
+
+        setTimeout(() => {
+            window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=${id}`;
+        }, 2000);
+    } catch (error) {
+        console.error("Error al procesar la compra:", error);
+        Swal.fire({
             icon: "error",
             title: "Error",
-            text: `El producto ${item.name} no tiene un identificador válido.`,
-          });
-          setLoading(false);
-          return;
-        }
-      }
-
-      let items = cartItems.map((item) => ({
-        title: item.name,
-        quantity: Number(item.quantity),
-        currency_id: "ARS",
-        unit_price: item.price,
-      }));
-
-      const totalProductsPrice = items.reduce(
-        (acc, item) => acc + item.unit_price * item.quantity,
-        0
-      );
-
-      items = applyDiscount(items, totalProductsPrice);
-
-      if (shippingCost > 0) {
-        items.push({
-          title: "Costo de envío",
-          quantity: 1,
-          currency_id: "ARS",
-          unit_price: shippingCost,
+            text: "Hubo un problema al procesar la compra. Intenta nuevamente.",
         });
-      }
-
-      const preference = {
-        items: items,
-      };
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/create_preference`,
-        { preference }
-    );
-
-      const { id } = response.data;
-      Swal.fire({
-        icon: "success",
-        title: "Redirigiendo a pago",
-        text: "Serás redirigido a Mercado Pago.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
-      setTimeout(() => {
-        window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?preference-id=${id}`;
-      }, 2000);
-    } catch (error) {
-      console.error("Error al procesar la compra:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Hubo un problema al procesar la compra. Intenta nuevamente.",
-      });
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-100">
